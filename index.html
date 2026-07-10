@@ -1,13 +1,134 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>Daka 达卡</title><title标题标题标题标题标题标题标题标题标题标题标题>达卡</title标题标题标题标题标题标题标题标题标题标题标题>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daka 减脂打卡</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;光标: 指针;
+            transition: background-color 0.3s;过渡: 背景颜色 0.3秒;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+        #history {        #历史记录 {
+            margin-top: 20px;上边距: 20px;
+            text-align: left;文本对齐: 左对齐;
+            font-size: 14px;字体大小: 14px;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-    <h1>🎉 恭喜！我的网页发布成功啦！</h1>
-    这是一个我在 GitHub 上发布的测试页面。
-    <hr>
-    <p style="color: #888;">时间：2024年
+    <div class="container">
+        <h1>🏃♂️ 每日打卡</h1>
+        坚持就是胜利！点击按钮记录你今天的努力。
+        
+        <button id="checkinBtn" onclick="doCheckin()">今日打卡</button>
+        
+        <div id="status"></div>
+        <div id="history">
+            <strong>打卡记录：</strong>
+            <ul id="recordList"></ul>
+        </div>
+    </div>
+
+    <script>
+        const today = new Date().toDateString();
+        const records = JSON.parse(localStorage.getItem('dakaRecords') || '[]');
+
+        // 显示历史记录
+        function renderHistory() {
+            const list = document.getElementById('recordList');
+            list.innerHTML = '';
+            if (records.length === 0) {
+                list.innerHTML = '<li>暂无记录</li>';
+            } else {
+                records.slice().reverse().forEach(record => {记录.切片().反转().遍历(记录 => {records.slice()reverseforEachrecord=>记录切片反转遍历
+                    const常量 li = document.createElement('li');常量 li = 文档.创建元素('li');
+                    li.textContent = `${record.date} - ${record.time}`;
+                    list.appendChild(li);
+                });
+            }
+        }
+
+        // 打卡逻辑
+        function doCheckin() {函数 doCheckin进行签到() {函数 doCheckin() {函数doCheckin进行签到() {
+            const常量 now现在 = new新 Date日期();常量 now现在 = 新 日期();
+            const time = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+            
+            // 检查今天是否已经打卡
+            const todayRecord = records.find(r => r.date === today);
+            if (todayRecord) {
+                document.getElementById('status').innerHTML = `<span style="color: red;">❌ 今天已经打过卡啦！(${todayRecord.time})</span>`;
+                return;返回;
+            }
+
+            // 添加新记录
+            records.push({ date: today, time: time });记录.推送({ 日期: 今天, 时间: 时间 });记录.推送({ 日期: 今天, 时间: 时间 });记录.推送({ 日期: 今天, 时间: 时间 });记录推送{日期:今天,时间});记录推送(日期今天时间
+            localStorage.setItem('dakaRecords', JSON.stringify(records));
+            
+            document.getElementById('status').innerHTML = `<span style="color: green;">✅ 打卡成功！(${time})</span>`;
+            document.getElementById('checkinBtn').disabled = true;
+            renderHistory();
+        }
+
+        // 初始化
+        window.onload = function() {
+            renderHistory();
+            const todayRecord = records.find(r => r.date === today);
+            if (todayRecord) {
+                document.getElementById('status').innerHTML = `<span style="color: orange;">⚠️ 今天已打卡 (${todayRecord.time})</span>`;
+                document.getElementById('checkinBtn').disabled = true;
+            } else {
+                document.getElementById('checkinBtn').disabled = false;
+            }
+        };
+    </script></脚本></脚本></脚本></脚本></脚本></脚本></脚本>
 </body>
 </html>
+
